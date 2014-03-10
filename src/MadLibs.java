@@ -37,7 +37,7 @@ public class MadLibs
 		
 		try
 		{
-		file = new FileOutputStream(fileName, true);
+		file = new FileOutputStream(fileName);
 		}
 		
 		catch (FileNotFoundException e)
@@ -64,7 +64,6 @@ public class MadLibs
 			if (command.toLowerCase().equals("c"))
 			{
 				String file = getFile();
-				clearFile("output/"+ file);
 				PrintWriter writer = getFileWriter("output/" + file);
 				Scanner fileIn = getFileReader("input/" + file);
 				
@@ -104,62 +103,10 @@ public class MadLibs
 	private String getFile() 
 	{
 		yourFile = getString("Enter file name: ");
-		String file = "";
 		
-		try
-		{
-			if (yourFile.equals("output/clothes.txt"))
-			{
-				file = yourFile;
-			}
-			
-			if (yourFile.equals("output/dance.txt"))
-			{
-				file = yourFile;
-			}
-			
-			if (yourFile.equals("output/simple.txt"))
-			{
-				file = yourFile;
-			}
-			
-			if (yourFile.equals("output/tarzan.txt"))
-			{
-				file = yourFile;
-			}
-		}
-		
-		catch(Exception e)
-		{
-			System.out.println("Not a valid file name. Please try again.");
-			System.out.println(e.getMessage());
-		}
-		return file;
+		return yourFile;
 	}
 	
-	private PrintWriter clearFile(String fileName) 
-	{
-		FileOutputStream file = null;
-		
-		PrintWriter writer;
-		try 
-		{
-			file = new FileOutputStream(fileName, false);
-		} 
-		catch (FileNotFoundException e) 
-		{
-			System.out.println(e.getMessage());
-			return null; 
-		}
-		
-		writer = new PrintWriter(file);
-		writer.print("");
-		writer.close();
-		return new PrintWriter(file);
-	}
-	
-	
-
 	/**
 	 * @param line 
 	 * @param string: this string is one line submitted for processing by the method.
@@ -220,7 +167,6 @@ public class MadLibs
 		
 		answer = getAnswer(thisCue, cueStart);
 		answerStart = answer.substring(0,1);
-		System.out.println(stringA + ", " + answerStart + ", " + articleC + ", " + cueReplace + ", " + answer);
 		
 		return (changeString(stringA, answerStart, articleC, cueReplace, answer));
 	}
