@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class MadLibs 
 {
-	private static final String MADLIB_FILE = "input/dance.txt";
 	private static final String ARTICLE_A = " a ";
 	private static final String ARTICLE_B = " an ";
 	private static final String CUE_START = "<";
@@ -121,29 +120,32 @@ public class MadLibs
 	 * 7) 
 	 * @return 
 	 */
-	private String createMadLib(String line) 
+	private String createMadLib(String string) 
 	{
-		String newString = "";
+		int x = 0;
+		int y = 0;
+		int z = getCueCount(string);
+		String answer = "";
+		//String article = "";
+		int Startpoint = 0;
 		
-		if(line.indexOf(CUE_START) != -1)
-		{
-			int Startpoint = 0;
-			int x = line.indexOf(CUE_START, Startpoint); //gets index of first "<";
-			int y = line.indexOf(CUE_END, x); //gets index of ">" after "<";
-			Startpoint = x+1;
-			String thisCue = line.substring(x+1,y);
-			String cueReplace = line.substring(x, y+1);
-			String article = getArticle(x,line);
-			System.out.println(line);
-			System.out.println(x + ", " + y + ", " + thisCue + ", " + cueReplace + ", " + article);
-			newString = (replaceCue(line, thisCue, article, cueReplace));
-			return newString;
-		}
-		else
-		{
-			newString = line;
-		}
-		return newString;
+			if (z != 0)
+			{
+				for (int i = 0; i < z; i++)
+				{
+					x = string.indexOf(CUE_START, Startpoint); //gets index of next "<";
+					y = string.indexOf(CUE_END, x); //gets index of ">" after "<";
+					String thisCue = string.substring(x+1,y);
+					String cueStart = thisCue.substring(0,1);
+					String cueReplace = string.substring(x, y+1);
+					answer = getAnswer(thisCue, cueStart);
+					string = string.replace(cueReplace, answer);
+					Startpoint = x;
+					//System.out.println(string);
+					//System.out.println(x + ", " + y + ", " + thisCue + ", " + cueReplace);
+				}
+			}
+		return string;
 	}
 	
 	public void viewMadLib(String string)
@@ -171,6 +173,14 @@ public class MadLibs
 		return (changeString(stringA, answerStart, articleC, cueReplace, answer));
 	}
 	
+	/**
+	 * @param thisCue: the madlib prompt with the greater than/less than signs around it.
+	 * @param cueStart: the first letter of thisCue (the word itself).
+	 * @return: the prompt that the user sees that asks for the word for the mablib.
+	 * This method uses the starting letter of the cue and and the cue itself to figure out if
+	 * cue starts with a vowel. If it does it changes the article of the prompt to "an"
+	 * and returns the prompt. Otherwise, it just returns the prompt.
+	 */
 	public String getAnswer(String thisCue, String cueStart)
 	{
 		String answer = "";
@@ -224,6 +234,19 @@ public class MadLibs
 		article = "the";
 		}
 		return article;
+	}
+	
+	public int getCueCount(String string)
+	{
+		int counter = 0;
+		for( int i = 0; i < string.length(); i++ ) 
+		{
+		    if(string.charAt(i) == '<' ) 
+		    {
+		        counter++;
+		    } 
+		}
+		return counter;
 	}
 	
 	public void printString(String text)
