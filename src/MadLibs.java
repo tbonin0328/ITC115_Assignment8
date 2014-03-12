@@ -13,6 +13,7 @@ public class MadLibs
 	private static final String CUE_START = "<";
 	private static final String CUE_END = ">";
 	private static String yourFile = null;
+	private static String fileA = "";
 	
 	private Scanner in = new Scanner(System.in);
 	
@@ -30,9 +31,9 @@ public class MadLibs
 		} 
 		catch (FileNotFoundException e) 
 		{
-			System.out.println(fileName);
 			System.out.println("Not a valid file name! Please try again.");
-			return (getFileReader("input/" + getFile()));	
+			fileA = getFile();
+			return (getFileReader("input/" + fileA));	
 		}				
 	}
 	
@@ -88,9 +89,9 @@ public class MadLibs
 	
 			if (command.toLowerCase().equals("c"))
 			{	
-				String file = getFile();
-				Scanner fileIn = getFileReader("input/" + file);
-				PrintWriter writer = getFileWriter("output/" + file);
+				fileA = getFile();
+				Scanner fileIn = getFileReader("input/" + fileA);
+				PrintWriter writer = getFileWriter("output/" + fileA);
 				
 				while(fileIn.hasNextLine())
 				{
@@ -106,8 +107,8 @@ public class MadLibs
 	
 			if (command.toLowerCase().equals("v"))
 			{
-				String file = getFile();
-				Scanner fileIn = getFileReader("output/" + file);
+				fileA = getFile();
+				Scanner fileIn = getFileReader("output/" + fileA);
 				
 				while(fileIn.hasNextLine())
 				{
@@ -146,15 +147,18 @@ public class MadLibs
 	 * 		-- int y: the variable used to to store the index of the ">".
 	 * 		-- String answer: the variable used to store the madlib answer entered by the 
 	 * 		user.
+	 * 		-- String thisCue: the string used to prompt the user for the right kind of word.
+	 * 		-- String cueStart: the first letter of the cue, used to get an "a" or "an" article for
+	 * 		prompt.
+	 * 		-- String cueReplace: the string that the user's text will replace.
 	 * 2) gets the index of "<" using the indexOf method; stores it as x.
 	 * 3) gets the index of ">" using x as the starting index; stores is as y.
-	 * 4) Creates a string called thisCue using x+1 as the starting index and
-	 * y as the ending index. "thisCue" is the madlib prompt without the greater 
-	 * than/less than signs around it.
-	 * 5) Creates a string called cueReplace using x as the starting index and y+1
-	 * as the ending index.
-	 * 7) 
-	 * @return 
+	 * 4) Creates thisCue using x+1 as the starting index and 	 * y as the ending index. 
+	 * 5) Creates cueReplace using x as the starting index and y+1 as the ending index.
+	 * 7) Used getAnswer method to get answer from user.
+	 * 8) Uses replace method to replace the cueReplace with the user's answer.
+	 * 9) Updates the Startpoint to x so the loop can move on to the next cue. 
+	 * @return: returns the final string.
 	 */
 	private String createMadLib(String string) 
 	{
@@ -171,8 +175,8 @@ public class MadLibs
 		{
 			for (int i = 0; i < z; i++)
 			{
-				x = string.indexOf(CUE_START, Startpoint); //gets index of next "<";
-				y = string.indexOf(CUE_END, x); //gets index of ">" after "<";
+				x = string.indexOf(CUE_START, Startpoint); 
+				y = string.indexOf(CUE_END, x); 
 				thisCue = string.substring(x+1,y);
 				cueStart = thisCue.substring(0,1);
 				cueReplace = string.substring(x, y+1);
@@ -212,6 +216,12 @@ public class MadLibs
 		return prompt;
 	}
 	
+	/**
+	 * @param string: the line that the madlib is currently one
+	 * @return: the number of cues in the line
+	 * This method uses a for loop to count the number of greater than signs in a line.
+	 * This number is used to determine how many times to ask the user for input.
+	 */
 	public int getCueCount(String string)
 	{
 		int counter = 0;
@@ -225,20 +235,34 @@ public class MadLibs
 		return counter;
 	}
 	
+	/**
+	 * @param text: The text that the system will print to the screen.
+	 * This method takes in text that it then prints to the console.
+	 */
 	public void printString(String text)
 	{
 		System.out.println(text);
 	}
 	
+	/**
+	 * @param prompt: The text used to prompt the user to enter an answer to the console.
+	 * @return: the taking in of the system of the users input.
+	 * This method prompts the user to enter information and then stores it using the Scanner class.
+	 */
 	public String getString(String prompt)
 	{
 		System.out.println(prompt);
 		return in.nextLine();
 	}
 			
+	/**
+	 * @param args: the array for the main method.
+	 * This method runs the program.
+	 */
 	public static void main(String[] args)
 	{
 		MadLibs program = new MadLibs();
 		program.play();
 	}
 }
+
